@@ -1,0 +1,23 @@
+{
+  "name": "banco-conhecimentos-avanti",
+  "version": "1.0.0",
+  "description": "API do projeto Banco de Trocas de Conhecimento",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.4.0",
+    "@prisma/client": "^7.4.0",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "prisma": "^7.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
