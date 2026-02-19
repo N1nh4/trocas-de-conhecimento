@@ -1,7 +1,7 @@
 import express from 'express';
 
 // import pessoaRoutes from './modules/pessoas/pessoa.routes.js';
-// import conhecimentoRoutes from './modules/conhecimentos/conhecimento.routes.js';
+import conhecimentoRoutes from './modules/conhecimentos/conhecimento.route.js';
 
 const app = express();
 
@@ -12,6 +12,6 @@ app.get('/health', (req, res) => {
 });
 
 // app.use('/pessoas', pessoaRoutes);
-// app.use('/conhecimentos', conhecimentoRoutes)
+app.use('/conhecimentos', conhecimentoRoutes)
 
 export default app;
