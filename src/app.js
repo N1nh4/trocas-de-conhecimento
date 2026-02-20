@@ -1,6 +1,6 @@
 import express from 'express';
 
-// import pessoaRoutes from './modules/pessoas/pessoa.routes.js';
+// import pessoaRoutes from './modules/pessoas/pessoa.route.js';
 import conhecimentoRoutes from './modules/conhecimentos/conhecimento.route.js';
 
 const app = express();

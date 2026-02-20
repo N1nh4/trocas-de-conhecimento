@@ -15,7 +15,7 @@ class ConhecimentoService {
             };
         }
 
-        // Verificar se a pessoa existe
+        // Verifica se a pessoa existe
         const pessoaExiste = await prisma.pessoa.findUnique({
             where: { id: Number(pessoaId) }
         });
@@ -27,7 +27,7 @@ class ConhecimentoService {
             };
         }
 
-        // Criar o conhecimento
+        // Cria o conhecimento
         const novoConhecimento = await prisma.conhecimento.create({
             data: {
                 titulo,
@@ -41,14 +41,58 @@ class ConhecimentoService {
         return novoConhecimento;
     }
 
-    // Listar todos os conhecimentos (Lucas)
-    async findAll() {
-        // implementar
+    // Listar os conhecimentos sem e com filtros e com busca por título ou descrição (Rhobertta)
+    async findAll(filters) {
+
+        const { categoria, nivel, search } = filters;
+
+        const where = {};
+
+        if (categoria) {
+            where.categoria = categoria;
+        }
+
+        if (nivel) {
+            where.nivel = nivel;
+        }
+
+        if (search) {
+            where.OR = [
+                {
+                    titulo: {
+                        contains: search,
+                        mode: "insensitive"
+                    }
+                },
+                {
+                    descricao: {
+                        contains: search,
+                        mode: "insensitive"
+                    }
+                }
+            ];
+        }
+
+        return await prisma.conhecimento.findMany({
+            where
+        });
     }
 
-    // Buscar conhecimento por ID (Lucas)
+    // Buscar conhecimento por ID (Rhobertta)
     async findById(id) {
-        // implementar
+
+        const conhecimento = await prisma.conhecimento.findUnique({
+            where: { id: Number(id) }
+        });
+
+        if (!conhecimento) {
+            throw {
+                statusCode: 404,
+                message: 'Conhecimento não encontrado.'
+            };
+        }
+
+        return conhecimento;
     }
 
     // Atualizar conhecimento (Alana)
