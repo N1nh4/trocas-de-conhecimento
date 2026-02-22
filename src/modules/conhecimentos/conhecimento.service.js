@@ -1,66 +1,171 @@
 import prisma from "../../config/PrismaClient.js";
 
 class ConhecimentoService {
+  // Criar conhecimento (Rhobertta)
+  async create(data) {
+    const { titulo, descricao, categoria, nivel, pessoaId } = data;
 
-    // Criar conhecimento (Rhobertta)
-    async create(data) {
-
-        const { titulo, descricao, categoria, nivel, pessoaId } = data;
-
-        // Validação dos campos obrigatórios
-        if (!titulo || !descricao || !categoria || !nivel || !pessoaId) {
-            throw {
-                statusCode: 400,
-                message: 'Todos os campos obrigatórios devem ser preenchidos.'
-            };
-        }
-
-        // Verificar se a pessoa existe
-        const pessoaExiste = await prisma.pessoa.findUnique({
-            where: { id: Number(pessoaId) }
-        });
-
-        if (!pessoaExiste) {
-            throw {
-                statusCode: 404,
-                message: 'Pessoa não encontrada.'
-            };
-        }
-
-        // Criar o conhecimento
-        const novoConhecimento = await prisma.conhecimento.create({
-            data: {
-                titulo,
-                descricao,
-                categoria,
-                nivel,
-                pessoaId: Number(pessoaId)
-            }
-        });
-
-        return novoConhecimento;
+    // Validação dos campos obrigatórios
+    if (!titulo || !descricao || !categoria || !nivel || !pessoaId) {
+      throw {
+        statusCode: 400,
+        message: "Todos os campos obrigatórios devem ser preenchidos.",
+      };
     }
 
-    // Listar todos os conhecimentos (Lucas)
-    async findAll() {
-        // implementar
+    // Verifica se a pessoa existe
+    const pessoaExiste = await prisma.pessoa.findUnique({
+      where: { id: Number(pessoaId) },
+    });
+
+    if (!pessoaExiste) {
+      throw {
+        statusCode: 404,
+        message: "Pessoa não encontrada.",
+      };
     }
 
-    // Buscar conhecimento por ID (Lucas)
-    async findById(id) {
-        // implementar
+    // Cria o conhecimento
+    const novoConhecimento = await prisma.conhecimento.create({
+      data: {
+        titulo,
+        descricao,
+        categoria,
+        nivel,
+        pessoaId: Number(pessoaId),
+      },
+    });
+
+    return novoConhecimento;
+  }
+
+  // Listar os conhecimentos sem e com filtros e com busca por título ou descrição (Rhobertta)
+  async findAll(filters) {
+    const { categoria, nivel, search } = filters;
+
+    const where = {};
+
+    if (categoria) {
+      where.categoria = categoria;
     }
 
-    // Atualizar conhecimento (Alana)
-    async update(id, data) {
-        // implementar
+    if (nivel) {
+      where.nivel = nivel;
     }
 
-    // Deletar conhecimento (Alana)
-    async delete(id) {
-        // implementar
+    if (search) {
+      where.OR = [
+        {
+          titulo: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          descricao: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      ];
     }
 
+    return await prisma.conhecimento.findMany({
+      where,
+    });
+  }
+
+  // Buscar conhecimento por ID (Rhobertta)
+  async findById(id) {
+    const conhecimento = await prisma.conhecimento.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!conhecimento) {
+      throw {
+        statusCode: 404,
+        message: "Conhecimento não encontrado.",
+      };
+    }
+
+    return conhecimento;
+  }
+
+  // Atualizar conhecimento (Alana)
+  async update(id, data) {
+    const conhecimentoId = Number(id);
+
+    // Verifica se o id do conhecimento é válido
+    if (isNaN(conhecimentoId)) {
+      throw {
+        statusCode: 400,
+        message: "ID inválido.",
+      };
+    }
+    // Verifica se o conhecimento existe
+    const conhecimento = await prisma.conhecimento.findUnique({
+      where: { id: conhecimentoId },
+    });
+
+    if (!conhecimento) {
+      throw {
+        statusCode: 404,
+        message: "Conhecimento não encontrado.",
+      };
+    }
+
+    // Atualiza o novo conhecimento
+    const conhecimentoAtualizado = await prisma.conhecimento.update({
+      where: {
+        id: conhecimentoId,
+      },
+      data: {
+        ...(data.titulo && { titulo: data.titulo }),
+        ...(data.descricao && { descricao: data.descricao }),
+        ...(data.categoria && { categoria: data.categoria }),
+        ...(data.nivel && { nivel: data.nivel }),
+        ...(data.pessoaId && { pessoaId: Number(data.pessoaId) }),
+      },
+    });
+
+    return conhecimentoAtualizado;
+  }
+
+  // Deletar conhecimento (Alana)
+  async delete(id) {
+    const conhecimentoId = Number(id);
+
+    // Verifica se o id do conhecimento é válido
+    if (isNaN(conhecimentoId)) {
+      throw {
+        statusCode: 400,
+        message: "ID inválido.",
+      };
+    }
+
+    // Verifica se o conhecimento existe
+    const conhecimento = await prisma.conhecimento.findUnique({
+      where: { id: conhecimentoId },
+    });
+
+    if (!conhecimento) {
+      throw {
+        statusCode: 404,
+        message: "Conhecimento não encontrado.",
+      };
+    }
+
+    // Apaga o conhecimento
+    await prisma.conhecimento.delete({
+      where: {
+        id: conhecimentoId,
+      },
+    });
+
+    return {
+      message: "Conhecimento deletado com sucesso.",
+    };
+  }
 }
 
 export default new ConhecimentoService();
