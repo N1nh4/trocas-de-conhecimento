@@ -4,54 +4,54 @@ import pessoaService from "./pessoa.service.js";
 
 class pessoaController {
 
-    //Método POST /pessoas
-    async create(req, res) {
-        try {
-            const data = req.body;
-            const novaPessoa = await pessoaService.create(data);
-            
-            return res.status(201).json(novaPessoa);
+  //Método POST /pessoas
+  async create(req, res) {
+    try {
+      const data = req.body;
+      const novaPessoa = await pessoaService.create(data);
 
-        } catch (error) {
-            return res.status(error.statusCode || 500).json({
-                message: error.message || 'Erro interno do servidor.'
-            });
-        }
+      return res.status(201).json(novaPessoa);
+
+    } catch (error) {
+      return res.status(error.statusCode || 500).json({
+        message: error.message || 'Erro interno do servidor.'
+      });
     }
+  }
 
-    //Método GET /pessoas
-    async findAll(req, res) {
-        try {
-            const pessoas = await pessoaService.findAll();
-            return res.status(200).json(pessoas);
+  //Método GET /pessoas
+  async findAll(req, res) {
+    try {
+      const pessoas = await pessoaService.findAll();
+      return res.status(200).json(pessoas);
 
-        } catch (error) {
-            return res.status(error.statusCode || 500).json({
-                message: error.message || 'Erro interno do servidor.'
-            });
-        }
+    } catch (error) {
+      return res.status(error.statusCode || 500).json({
+        message: error.message || 'Erro interno do servidor.'
+      });
     }
+  }
 
-    //Método GET /pessoas/ :id
-    async findById(req, res) {
-        try {
-            const {id} = req.params;
-            const pessoas = await pessoaService.findById(id);
-            return res.status(200).json(pessoa);
+  //Método GET /pessoas/ :id
+  async findById(req, res) {
+    try {
+      const { id } = req.params;
+      const pessoas = await pessoaService.findById(id);
+      return res.status(200).json(pessoas);
 
-        } catch (error) {
-            return res.status(error.statusCode || 500).json({
-                message: error.message || 'Erro interno do servidor.'
-            })
-        }
+    } catch (error) {
+      return res.status(error.statusCode || 500).json({
+        message: error.message || 'Erro interno do servidor.'
+      })
     }
+  }
 
-    // rota: PUT /pessoas/:id [cite: 40]
+  // rota: PUT /pessoas/:id [cite: 40]
   async update(req, res) {
     try {
       const { id } = req.params;
       const data = req.body;
-      const result = await service.updatePessoa(id, data);
+      const result = await pessoaService.update(id, data);
       return res.status(200).json(result);
     } catch (error) {
       return res.status(400).json({ error: error.message });
@@ -68,7 +68,7 @@ class pessoaController {
       return res.status(400).json({ error: error.message });
     }
   }
-  
+
 
 }
 
