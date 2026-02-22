@@ -2,7 +2,6 @@ import prisma from "../../config/PrismaClient.js";
 import pessoaRepository from "./pessoa.repository.js";
 
 class PessoaService {
-
   //Criar pessoa (Pedro)
   async create(data) {
     const { nome, email, telefone, descricao } = data;
@@ -11,7 +10,7 @@ class PessoaService {
     if (!nome || !email || !telefone) {
       throw {
         statusCode: 400,
-        message: 'Todos os campos obrigatórios devem ser preenchidos.'
+        message: "Todos os campos obrigatórios devem ser preenchidos.",
       };
     }
 
@@ -20,15 +19,14 @@ class PessoaService {
     if (!emailRegex.test(email)) {
       throw {
         statusCode: 400,
-        message: 'Formato de email inválido'
+        message: "Formato de email inválido",
       };
     }
 
     //Verificação de email único
     const emailExistente = await prisma.pessoa.findUnique({
-      where: { email }
+      where: { email },
     });
-
 
     //Criar Pessoa
     const novaPessoa = await prisma.pessoa.create({
@@ -36,23 +34,22 @@ class PessoaService {
         nome,
         email,
         telefone,
-        descricao: descricao || null
+        descricao: descricao || null,
       },
       include: {
-        conhecimentos: true //retorna a pessoa criada com seus conhecimentos
-      }
+        conhecimentos: true, //retorna a pessoa criada com seus conhecimentos
+      },
     });
 
     return novaPessoa;
-
   }
 
   //Listar todas as pessoas
   async findAll() {
     const pessoas = await prisma.pessoa.findMany({
       include: {
-        conhecimentos: true
-      }
+        conhecimentos: true,
+      },
     });
 
     return pessoas;
@@ -63,22 +60,21 @@ class PessoaService {
     const pessoa = await prisma.pessoa.findUnique({
       where: { id: Number(id) },
       include: {
-        conhecimentos: true
-      }
+        conhecimentos: true,
+      },
     });
 
     if (!pessoa) {
       throw {
         statusCode: 404,
-        message: 'Pessoa não encontrada.'
-      }
+        message: "Pessoa não encontrada.",
+      };
     }
 
     return pessoa;
   }
 
   async update(id, data) {
-
     const pessoaExists = await pessoaRepository.findById(id);
     if (!pessoaExists) {
       throw new Error("Pessoa não encontrada.");
@@ -95,16 +91,12 @@ class PessoaService {
     }
 
     // regra: impede deletar pessoa com conhecimentos vinculados (Kaline)
-    if (pessoa.conhecimentos && pessoa.conhecimentos.length > 0) {
-      throw new Error("Não é possível remover: esta pessoa possui conhecimentos cadastrados.");
-    }
+    // if (pessoa.conhecimentos && pessoa.conhecimentos.length > 0) {
+    //   throw new Error("Não é possível remover: esta pessoa possui conhecimentos cadastrados.");
+    // }
 
     return await pessoaRepository.delete(id);
   }
-
 }
 
 export default new PessoaService();
-
-
-
