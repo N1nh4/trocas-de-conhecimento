@@ -1,4 +1,4 @@
-import prisma from '../../config/PrismaClient.js';
+import prisma from '../../config/prismaClient.js';
 
 export class PessoaRepository {
     async findById(id) {

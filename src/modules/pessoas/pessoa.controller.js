@@ -46,20 +46,7 @@ class pessoaController {
         }
     }
 
-    //Método PUT (Kaline)
-
-    //Método DELETE (Kaline)
-
-}
-
-export default new pessoaController();
-
-import { PessoaService } from './pessoa.service.js';
-
-const service = new PessoaService();
-
-export class PessoaController {
-  // rota: PUT /pessoas/:id [cite: 40]
+    // rota: PUT /pessoas/:id [cite: 40]
   async update(req, res) {
     try {
       const { id } = req.params;
@@ -81,4 +68,10 @@ export class PessoaController {
       return res.status(400).json({ error: error.message });
     }
   }
+  
+
 }
+
+export default new pessoaController();
+
+
