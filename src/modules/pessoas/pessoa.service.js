@@ -84,16 +84,7 @@ class PessoaService {
         //implementar
     }
 
-}
-
-export default new PessoaService();
-
-import { PessoaRepository } from './pessoa.repository.js';
-
-const repository = new PessoaRepository();
-
-export class PessoaService {
-  async updatePessoa(id, data) {
+    async updatePessoa(id, data) {
     const pessoaExists = await repository.findById(id);
     if (!pessoaExists) {
       throw new Error("Pessoa não encontrada.");
@@ -116,5 +107,10 @@ export class PessoaService {
 
     return await repository.delete(id);
   }
+
 }
+
+export default new PessoaService();
+
+
 

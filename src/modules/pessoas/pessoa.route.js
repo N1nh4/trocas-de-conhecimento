@@ -9,7 +9,6 @@ router.post('/', pessoaController.create);
 router.get('/', pessoaController.findAll);
 router.get('/:id', pessoaController.findById);
 
-const pessoaController = new PessoaController(); // (Kaline)
 
 // atualiza os dados de uma pessoa (nome, email, telefone, descrição) (Kaline)
 router.put('/:id', (req, res) => pessoaController.update(req, res));
