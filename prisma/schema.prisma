@@ -44,5 +44,5 @@ model Conhecimento {
   nivel      Nivel
 
   pessoaId   Int
-  pessoa     Pessoa     @relation(fields: [pessoaId], references: [id])
+  pessoa     Pessoa     @relation(fields: [pessoaId], references: [id], onDelete: Cascade)
 }
