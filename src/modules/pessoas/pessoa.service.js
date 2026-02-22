@@ -1,5 +1,5 @@
 import prisma from "../../config/PrismaClient.js";
-import { PessoaRepository } from "./pessoa.repository.js";
+import pessoaRepository from "./pessoa.repository.js";
 
 class PessoaService {
 
@@ -79,16 +79,16 @@ class PessoaService {
 
   async update(id, data) {
 
-    const pessoaExists = await PessoaRepository.findById(id);
+    const pessoaExists = await pessoaRepository.findById(id);
     if (!pessoaExists) {
       throw new Error("Pessoa não encontrada.");
     }
 
-    return await PessoaRepository.update(id, data);
+    return await pessoaRepository.update(id, data);
   }
 
   async deletePessoa(id) {
-    const pessoa = await PessoaRepository.findById(id);
+    const pessoa = await pessoaRepository.findById(id);
 
     if (!pessoa) {
       throw new Error("Pessoa não encontrada.");
@@ -99,7 +99,7 @@ class PessoaService {
       throw new Error("Não é possível remover: esta pessoa possui conhecimentos cadastrados.");
     }
 
-    return await PessoaRepository.delete(id);
+    return await pessoaRepository.delete(id);
   }
 
 }

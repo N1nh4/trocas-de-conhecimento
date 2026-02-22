@@ -21,3 +21,5 @@ export class PessoaRepository {
         });
     }
 }
+
+export default new PessoaRepository();

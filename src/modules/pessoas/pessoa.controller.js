@@ -54,7 +54,7 @@ class pessoaController {
       const result = await pessoaService.update(id, data);
       return res.status(200).json(result);
     } catch (error) {
-      return res.status(400).json({ error: error.message });
+      return res.status(500).json({ error: error.message });
     }
   }
 
@@ -62,10 +62,10 @@ class pessoaController {
   async delete(req, res) {
     try {
       const { id } = req.params;
-      await service.deletePessoa(id);
+      await pessoaService.deletePessoa(id);
       return res.status(204).send(); // sucesso sem conteúdo
     } catch (error) {
-      return res.status(400).json({ error: error.message });
+      return res.status(500).json({ error: error.message });
     }
   }
 
