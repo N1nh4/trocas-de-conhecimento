@@ -41,7 +41,7 @@ class ConhecimentoService {
 
   // Listar os conhecimentos sem e com filtros e com busca por título ou descrição (Rhobertta)
   async findAll(filters) {
-    const { categoria, nivel, search } = filters;
+    const { categoria, nivel, busca } = filters;
 
     const where = {};
 
@@ -53,17 +53,17 @@ class ConhecimentoService {
       where.nivel = nivel;
     }
 
-    if (search) {
+    if (busca) {
       where.OR = [
         {
           titulo: {
-            contains: search,
+            contains: busca,
             mode: "insensitive",
           },
         },
         {
           descricao: {
-            contains: search,
+            contains: busca,
             mode: "insensitive",
           },
         },
@@ -72,6 +72,13 @@ class ConhecimentoService {
 
     return await prisma.conhecimento.findMany({
       where,
+      include: {
+        pessoa: {
+          select: {
+            nome: true,
+          },
+        },
+      },
     });
   }
 
@@ -79,6 +86,16 @@ class ConhecimentoService {
   async findById(id) {
     const conhecimento = await prisma.conhecimento.findUnique({
       where: { id: Number(id) },
+      include: {
+        pessoa: {
+          select: {
+            nome: true,
+            email: true,
+            telefone: true,
+            descricao: true,
+          },
+        },
+      },
     });
 
     if (!conhecimento) {
